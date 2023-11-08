@@ -1,0 +1,18 @@
+<template>
+  <li>
+    <label class="p-2 flex justify-between items-center">
+      {{ props.assignment.name }}
+      <span class="border rounded px-1 py-px text-xs text-gray-400">{{ props.assignment.tag }}</span>
+      <!-- <input type="checkbox" v-model="props.assignment.complete" class="ml-3"> -->
+    </label>
+  </li>
+</template>
+
+<script setup>
+import { defineProps } from 'vue';
+const props = defineProps({
+  assignment: Object
+}); 
+</script>
+
+<style lang="scss" scoped></style>
