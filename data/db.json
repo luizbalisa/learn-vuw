@@ -2,7 +2,7 @@
     "assignments": [
       {
         "name": "Finish project",
-        "complete": false,
+        "complete": true,
         "id": 1,
         "tag": "math"
       },

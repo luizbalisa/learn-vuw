@@ -1,13 +1,13 @@
 <template>
     <section class="space-y-6">
         <!--title and assignments are props (properties) on the AssignmentList component-->
-        <assignment-list :assignments="filters.inProgress" title="In Progress"></assignment-list>
-        <assignment-list :assignments="filters.completed" title="Completed"></assignment-list>
+        <assignment-list :assignments="filters.inProgress.length" title="In Progress"/>
+        <assignment-list :assignments="filters.completed" title="Completed"/>
 
         <!--when the $emit function is fired on the child component, with the name of 'assignmentCreateAction',-->
         <!--fire the parent function called add-->
         <!--assignmentCreateAction is a custom event-->
-        <assignment-create @assignmentCreateAction="add"></assignment-create>
+        <assignment-create @assignmentCreateAction="add"/>
     </section>
 </template>
 
@@ -21,10 +21,20 @@ let assignments = reactive([]);
 onMounted(() => {
     // start json server first: npx json-server data/db.json -p 3001
     fetch('http://localhost:3001/assignments')
-        .then((response) => response.json())
-        .then((assignment) => {
-            assignments =  assignment;
-        })
+    .then((response) => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
+    .then((assignment) => { 
+        console.log(assignment);
+        assignments.push(...assignment);
+    })
+    .catch((error) => {
+        console.error('Error fetching assignments:', error);
+    });
+
 })
 
 const filters = computed(() => {
