@@ -1,8 +1,10 @@
 <template>
     <section class="space-y-6">
         <!--title and assignments are props (properties) on the AssignmentList component-->
-        <assignment-list :assignments="filters?.inProgress" title="In Progress"/>
-        <assignment-list :assignments="filters.completed" title="Completed"/>
+        <assignment-list :assignments="filters.inProgress" title="In Progress"/>
+        <div  v-show="showCompleted">
+            <assignment-list :assignments="filters.completed" title="Completed" @toggle="showCompleted = !showCompleted" can-toggle/>
+        </div>
         <!--when the $emit function is fired on the child component, with the name of 'assignmentCreateAction',-->
         <!--fire the parent function called add-->
         <!--assignmentCreateAction is a custom event-->
@@ -16,6 +18,7 @@ import AssignmentList from "../components/AssignmentList.vue";
 import AssignmentCreate from "../components/AssignmentCreate.vue";
 
 let assignments = reactive(ref([]));
+const showCompleted = ref(true)
 
 onMounted(() => {
     fetch('http://localhost:3001/assignments')
@@ -43,24 +46,12 @@ const filters = computed(() => {
 // assigmentName argument comes from the child component emit vue function from the second argument
 // seems that it can be called whatever you want it to be
 function add(assigmentName) {
-
-    const addAssignment = { name: assigmentName };
-
-    // some: performs the specified action for each element in an array
-    const assignmentExists = assignments.value.some(obj => obj.name === addAssignment.name);
-
-    if (assignmentExists) {
-        alert('Assignment ' + assigmentName + ' already exists');
-    }
-
-    if (!assignmentExists) {
         assignments.value.push({
             name: assigmentName,
             completed: false,
             id: assignments.value.length + 1,
             tag: 'none'
         });
-    }
 }
 </script>
 
